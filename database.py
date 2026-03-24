@@ -1,0 +1,22 @@
+python
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+
+Base = declarative_base()
+engine = create_engine('sqlite:///ehmedlibot.db')
+Session = sessionmaker(bind=engine)
+
+class User(Base):
+    __tablename__ = 'users'
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, unique=True)
+    username = Column(String, nullable=True)
+    is_premium = Column(Boolean, default=False)
+    premium_until = Column(DateTime, nullable=True)
+    daily_searches = Column(Integer, default=0)
+    last_reset = Column(DateTime, default=datetime.now)
+    created_at = Column(DateTime, default=datetime.now)
+
+Base.metadata.create_all(engine)
